@@ -8,13 +8,9 @@ using UnityEngine;
 
 namespace JusticeForPunchDash
 {
-    [BepInPlugin(pluginGuid, pluginName, pluginversion)]
+    [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     public class Mod : BaseUnityPlugin
     {
-        public const string pluginGuid = "kestrel.iamyourbeast.justiceforpunchdash";
-        public const string pluginName = "Justice For Punch Dash";
-        public const string pluginversion = "1.1.2";
-
         public static bool successfulHit = false;
 
         public static ConfigEntry<bool> dontSaveTimes;
@@ -24,8 +20,7 @@ namespace JusticeForPunchDash
 
             dontSaveTimes = Config.Bind("Options", "Stop Saving Times", true, "Stops times from being saved while the mod is active to avoid accidental overwriting");
 
-            Harmony harmony = new Harmony(pluginGuid);
-            harmony.PatchAll();
+            new Harmony(PluginInfo.PLUGIN_GUID).PatchAll();
         }
     }
 
