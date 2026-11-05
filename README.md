@@ -8,11 +8,12 @@ NOTE: while playing with this mod, times will not be saved by default. Theres an
 
 # Installation
 
-!!! You need [Bepinex 6](https://github.com/BepInEx/BepInEx/releases/tag/v6.0.0-pre.2) for mono !!!
-(if you have no idea what the versions mean try BepInEx-Unity.Mono-win-x64-6.0.0-pre.2 and it might work. maybe)
+!!! You need [Bepinex 5](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.21) !!!
 
-Once bepinex is installed, put the dll into the BepInEx/plugins folder in the game's root directory.
+<small>(if you have no idea what the versions mean try BepInEx_x64_5.4.21.0 and it might work. maybe)</small>
+
+Once BepInEx is installed, extract the zip into the BepInEx/plugins folder in the game's root directory.
 
 have fun :3
 
-![](https://files.catbox.moe/8p6xn8.jpg)
+<img src="https://files.catbox.moe/8p6xn8.jpg" width="250" alt="kity">
