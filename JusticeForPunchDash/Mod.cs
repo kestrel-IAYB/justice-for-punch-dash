@@ -1,12 +1,10 @@
-﻿using BepInEx.Configuration;
-using BepInEx.Unity.Mono;
+﻿using AimAssist;
 using BepInEx;
+using BepInEx.Configuration;
+using Enemy;
 using HarmonyLib;
 using Projectiles;
 using UnityEngine;
-using AimAssist;
-using Enemy;
-using System;
 
 namespace JusticeForPunchDash
 {
@@ -39,18 +37,13 @@ namespace JusticeForPunchDash
         public static void Postfix(ref WeaponPickup ___pickup) {
 
             bool flag = false;
-            Vector3 pos = Vector3.zero;
-            Vector3 goal = Vector3.zero;
-            bool flag2 = true;
-
-            if (___pickup && ___pickup.GetWeaponDetails().GetProjectilePrefab().GetComponent<SpherecastProjectile>().GetCollisionType() == SpherecastProjectile.CollisionType.AllTargets) {
-                flag2 = false;
-            }
+            var goal = Vector3.zero;
+            bool flag2 = !(___pickup && ___pickup.GetWeaponDetails().GetProjectilePrefab().GetComponent<SpherecastProjectile>().GetCollisionType() == SpherecastProjectile.CollisionType.AllTargets);
 
             AimTarget highlightedTarget = GameManager.instance.player.GetAimManager().GetHighlightedTarget();
 
             if (highlightedTarget) {
-                pos = highlightedTarget.GetCenter();
+                var pos = highlightedTarget.GetCenter();
                 Enemy.Enemy enemy = highlightedTarget.GetEnemy();
                 if (enemy && flag2 && enemy is EnemyHuman) {
                     flag = true;

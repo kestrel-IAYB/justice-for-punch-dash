@@ -1,76 +1,63 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0B8E892D-E7F4-45DE-BF87-E47310828146}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JusticeForPunchDash</RootNamespace>
-    <AssemblyName>JusticeForPunchDash</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <Product>JusticeForPunchDash</Product>
+    <Version>1.1.3</Version>
+    <Description>Restores the punch dash bug from the IAYB demo</Description>
+    <BepInExPluginGuid>kestrel.iamyourbeast.justiceforpunchdash</BepInExPluginGuid>
+    <AssemblyName>$(Product)</AssemblyName>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <!-- https://github.com/BepInEx/BepInEx.Analyzers/pull/6 oh my god PLEASE someone merge this -->
+    <NoWarn>1701;1702;Harmony003;</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+
+  <!--
+    if you would like to build this project and one or both of your BepInEx and/or game are
+    not installed in the usual place, set <GameDir>/<BepInExDir> here. Remember trailing slashes!
+    -->
+  <Import Project="Directory.Build.local.props" Condition="Exists('Directory.Build.local.props')" />
+
+  <PropertyGroup Condition="'$(GameDir)' == ''">
+    <GameDir>C:\Program Files (x86)\Steam\steamapps\common\I Am Your Beast</GameDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(BepInExDir)' == ''">
+    <BepInExDir>$(GameDir)\BepInEx\</BepInExDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GameLibDir>$(GameDir)\I Am Your Beast_Data\Managed\</GameLibDir>
+    <DevBuildDir>$(BepInExDir)plugins\dev-builds\</DevBuildDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <DebugType>embedded</DebugType>
+    <PathMap>$(MSBuildProjectDirectory)=/,$(NuGetPackageRoot)=.nuget</PathMap>
+    <EnableSourceLink>false</EnableSourceLink>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>..\..\Libs\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="BepInEx.Core">
-      <HintPath>..\..\Libs\BepInEx.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="BepInEx.Preloader.Core">
-      <HintPath>..\..\Libs\BepInEx.Preloader.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="BepInEx.Unity.Common">
-      <HintPath>..\..\Libs\BepInEx.Unity.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="BepInEx.Unity.Mono">
-      <HintPath>..\..\Libs\BepInEx.Unity.Mono.dll</HintPath>
-    </Reference>
-    <Reference Include="BepInEx.Unity.Mono.Preloader">
-      <HintPath>..\..\Libs\BepInEx.Unity.Mono.Preloader.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\Libs\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\Libs\UnityEngine.CoreModule.dll</HintPath>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.0.8" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Core" Version="5.4.21" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="1.1.0" />
+    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.3" />
+    <PackageReference Include="UnityEngine.Modules" Version="2022.3.5" IncludeAssets="compile" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp" Publicize="true">
+      <HintPath>$(GameLibDir)\Assembly-CSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Mod.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <Target Name="CopyDllToGame" AfterTargets="PostBuildEvent">
+    <ItemGroup>
+      <OldFiles Include="$(DevBuildDir)$(Product)-v*.dll" />
+    </ItemGroup>
+    <Delete Files="@(OldFiles)" />
+    <Move SourceFiles="$(TargetDir)$(TargetName).dll" DestinationFiles="$(DevBuildDir)$(Product)-v$(Version).dll"/>
+  </Target>
 </Project>
